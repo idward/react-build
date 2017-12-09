@@ -1,36 +1,33 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import store from '../store/store';
+import * as actions from '../actions/counter.action';
 
 class Counter extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            count: props.initialValue
-        }
+        this.state = this.getOwnState();
         this.increment = this.increment.bind(this);
         this.decrement = this.decrement.bind(this);
+        this.onChange = this.onChange.bind(this);
+    }
+
+    getOwnState() {
+        return {count: store.getState()[this.props.caption]};
+    }
+
+    onChange() {
+        this.setState(this.getOwnState());
     }
 
     increment() {
-        const oldValue = this.state.count;
-        const newValue = this.state.count + 1;
-
-        this.setState({
-            count: newValue
-        });
-
-        this.props.onCalAmount(oldValue, newValue);
+        debugger;
+        store.dispatch(actions.increment(this.props.caption));
     }
 
     decrement() {
-        const oldValue = this.state.count;
-        const newValue = this.state.count - 1;
-
-        this.setState({
-            count: newValue
-        });
-
-        this.props.onCalAmount(oldValue, newValue);
+        debugger;
+        store.dispatch(actions.decrement(this.props.caption));
     }
 
     //组件将要加载
@@ -74,6 +71,7 @@ class Counter extends Component {
     //组件加载完毕（所有的Dom树形节点已经渲染完毕）
     componentDidMount() {
         console.log(this.props.caption + ': componentDidMount');
+        store.subscribe(this.onChange);
     }
 
     //组件卸载　
@@ -86,11 +84,11 @@ export default Counter;
 
 Counter.propTypes = {
     caption: PropTypes.string.isRequired,
-    initialValue: PropTypes.number,
-    onCalAmount: PropTypes.func
+    // initialValue: PropTypes.number,
+    // onCalAmount: PropTypes.func
 }
 
 Counter.defaultPropTypes = {
-    initialValue: 0,
-    onCalAmount: f => f //默认函数
+    // initialValue: 0,
+    // onCalAmount: f => f //默认函数
 }
