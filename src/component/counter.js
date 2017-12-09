@@ -21,12 +21,10 @@ class Counter extends Component {
     }
 
     increment() {
-        debugger;
         store.dispatch(actions.increment(this.props.caption));
     }
 
     decrement() {
-        debugger;
         store.dispatch(actions.decrement(this.props.caption));
     }
 
@@ -77,6 +75,7 @@ class Counter extends Component {
     //组件卸载　
     componentWillUnMount() {
         console.log(this.props.caption + ': componentWillUnMount');
+        store.unsubscribe(this.onChange);
     }
 }
 
